@@ -57,6 +57,6 @@ public class ConductorController : MonoBehaviour {
     void PlaySong() {
         startDspTime = AudioSettings.dspTime;
         Debug.Log("startDspTime: " + startDspTime);
-        music.PlayDelayed(BeatMovement.beatSpawnOffsetTime);
+        music.PlayDelayed(BeatManager.beatSpawnOffsetTime);
     }
 }
