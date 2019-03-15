@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class BeatMovement : MonoBehaviour {
 
-    public static float beatSpeed = 5.0f;
-    public static float beatDist;
-    public static float beatSpawnOffsetTime;
+    public float beatDist;
+    public float speed;
     public float spawnY;
     public float targetY;
     public float destroyY;
@@ -14,10 +13,13 @@ public class BeatMovement : MonoBehaviour {
     private Rigidbody2D beatRigidBody;
     private float spawnTime; // The conductor songPosition value at spawn time
     private float targetTime; // The conductor songPosition beat time
+    private float spawnOffsetTime;
 
-    public void SetSpawnTime(float _spawnTime) {
+    public void Initialize(float _spawnTime, float _offset) {
+        Debug.Log("Initialize: " + _spawnTime + " " + _offset);
+        spawnOffsetTime = _offset;
         spawnTime = _spawnTime;
-        targetTime = _spawnTime + beatSpawnOffsetTime;
+        targetTime = _spawnTime + spawnOffsetTime;
     }
 
     public float GetTargetTime() {
@@ -27,7 +29,6 @@ public class BeatMovement : MonoBehaviour {
     void Awake() {
         beatRigidBody = GetComponent<Rigidbody2D>();
         beatDist = spawnY - targetY;
-        beatSpawnOffsetTime = beatDist / beatSpeed;
     }
 
     // Use this for initialization
@@ -43,7 +44,7 @@ public class BeatMovement : MonoBehaviour {
 
     void Move() {
         Vector2 movement = Vector2.down * beatDist *
-            ((ConductorController.songPosition - spawnTime) / beatSpawnOffsetTime);
+            ((ConductorController.songPosition - spawnTime) / spawnOffsetTime);
         beatRigidBody.MovePosition((Vector2.up * spawnY) + movement);
     }
 
@@ -52,5 +53,4 @@ public class BeatMovement : MonoBehaviour {
             Destroy(gameObject);
         }
     }
-
 }

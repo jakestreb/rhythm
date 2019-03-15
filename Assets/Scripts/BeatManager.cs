@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BeatManager : MonoBehaviour {
 
+    public static float beatSpeed = 5.0f;
+    public static float beatSpawnOffsetTime;
     public float perfectHitMargin;
     public float goodHitMargin;
     public float hitMargin;
@@ -34,8 +36,13 @@ public class BeatManager : MonoBehaviour {
         }
         GameObject newBeat = Instantiate(beat, spawnPoint.position, spawnPoint.rotation);
         BeatMovement newBeatMovement = newBeat.GetComponent<BeatMovement>();
-        newBeatMovement.SetSpawnTime(spawnTime);
+        newBeatMovement.Initialize(spawnTime, beatSpawnOffsetTime);
         beats.Enqueue(newBeat);
+    }
+
+    private void Awake() {
+        float dist = spawnPoint.position.y - beatTarget.position.y;
+        beatSpawnOffsetTime = dist / beatSpeed;
     }
 
     // Update is called once per frame
