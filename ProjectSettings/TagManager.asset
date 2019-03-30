@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Track
+    uniqueID: 361074551
+    locked: 0
+  - name: BeatTarget
+    uniqueID: 3790075519
+    locked: 0
+  - name: Beat
+    uniqueID: 4151087569
+    locked: 0

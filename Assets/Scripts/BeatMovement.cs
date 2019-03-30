@@ -11,12 +11,13 @@ public class BeatMovement : MonoBehaviour {
     public float destroyY;
 
     private Rigidbody2D beatRigidBody;
+    private Transform spawnPoint;
     private float spawnTime; // The conductor songPosition value at spawn time
     private float targetTime; // The conductor songPosition beat time
     private float spawnOffsetTime;
 
-    public void Initialize(float _spawnTime, float _offset) {
-        Debug.Log("Initialize: " + _spawnTime + " " + _offset);
+    public void Initialize(Transform _spawnPoint, float _spawnTime, float _offset) {
+        spawnPoint = _spawnPoint;
         spawnOffsetTime = _offset;
         spawnTime = _spawnTime;
         targetTime = _spawnTime + spawnOffsetTime;
@@ -33,7 +34,7 @@ public class BeatMovement : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-		
+
 	}
 
 	// Update is called once per frame
@@ -45,7 +46,7 @@ public class BeatMovement : MonoBehaviour {
     void Move() {
         Vector2 movement = Vector2.down * beatDist *
             ((ConductorController.songPosition - spawnTime) / spawnOffsetTime);
-        beatRigidBody.MovePosition((Vector2.up * spawnY) + movement);
+        beatRigidBody.MovePosition((Vector2)spawnPoint.position + movement);
     }
 
     void DestroyIfOffscreen() {
