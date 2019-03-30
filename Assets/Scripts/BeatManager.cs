@@ -17,6 +17,9 @@ public class BeatManager : MonoBehaviour {
     private Queue<GameObject> beats = new Queue<GameObject>();
 
     public void HitBeat() {
+        if (beats.Count == 0) {
+            return;
+        }
         float songPos = ConductorController.songPosition;
         BeatMovement beatMovement = beats.Peek().GetComponent<BeatMovement>();
         float targetTime = beatMovement.GetTargetTime();
@@ -29,14 +32,10 @@ public class BeatManager : MonoBehaviour {
         }
     }
 
-    public void SpawnBeat(int note, float spawnTime) {
-        Debug.Log("SpawnBeat: " + note);
-        if (note == 0) {
-            return;
-        }
+    public void SpawnBeat(float spawnTime) {
         GameObject newBeat = Instantiate(beat, spawnPoint.position, spawnPoint.rotation);
         BeatMovement newBeatMovement = newBeat.GetComponent<BeatMovement>();
-        newBeatMovement.Initialize(spawnTime, beatSpawnOffsetTime);
+        newBeatMovement.Initialize(spawnPoint, spawnTime, beatSpawnOffsetTime);
         beats.Enqueue(newBeat);
     }
 

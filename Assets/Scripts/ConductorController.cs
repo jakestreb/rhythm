@@ -10,7 +10,7 @@ public class ConductorController : MonoBehaviour {
     public float measureDuration;
     public float beatDuration;
     public GameObject song;
-    public BeatManager beatManager;
+    public BeatManager[] beatManagers;
 
     private float nextMeasureStartTime = 0.0f;
     private float nextBeatStartTime = 0.0f;
@@ -35,23 +35,34 @@ public class ConductorController : MonoBehaviour {
     void Update() {
         songPosition = (float)(AudioSettings.dspTime - startDspTime)
             * music.pitch - metadata.offset;
-        Debug.Log("songPosition: " + songPosition);
         if (songPosition >= nextMeasureStartTime) {
+            // Start of new measure
             measureCounter += 1;
             beatCounter = 0;
-            Debug.Log("measureCounter: " + measureCounter);
-            Debug.Log("beatCounter: " + beatCounter);
-            beatManager.SpawnBeat(metadata.notes[measureCounter][beatCounter], nextMeasureStartTime);
+            SetBeatToSpawn(metadata.notes[measureCounter][beatCounter], nextMeasureStartTime);
             beatDuration = measureDuration / metadata.notes[measureCounter].Length;
             nextMeasureStartTime += measureDuration;
             nextBeatStartTime += beatDuration;
         }
         else if (songPosition >= nextBeatStartTime) {
+            // Start of new beat
             beatCounter += 1;
-            Debug.Log("beatCounter: " + beatCounter);
-            beatManager.SpawnBeat(metadata.notes[measureCounter][beatCounter], nextBeatStartTime);
+            SetBeatToSpawn(metadata.notes[measureCounter][beatCounter], nextBeatStartTime);
             nextBeatStartTime += beatDuration;
         }
+    }
+
+    void SetBeatToSpawn(byte note, float spawnTime) {
+        // Spawn a beat in each column where one is called for
+        for (int i = 0; i < beatManagers.Length; i++) {
+            if (IsBitSet(note, i)) {
+                beatManagers[beatManagers.Length - i - 1].SpawnBeat(spawnTime);
+            }
+        }
+    }
+
+    bool IsBitSet(byte b, int num) {
+        return (b & (1 << num)) != 0;
     }
 
     void PlaySong() {
