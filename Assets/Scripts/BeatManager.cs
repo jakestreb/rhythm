@@ -6,6 +6,7 @@ public class BeatManager : MonoBehaviour {
 
     public static float beatSpeed = 5.0f;
     public static float beatSpawnOffsetTime;
+    public float spawnDelay = 0.0f;
     public float perfectHitMargin;
     public float goodHitMargin;
     public float hitMargin;
@@ -35,11 +36,12 @@ public class BeatManager : MonoBehaviour {
     public void SpawnBeat(float spawnTime) {
         GameObject newBeat = Instantiate(beat, spawnPoint.position, spawnPoint.rotation);
         BeatMovement newBeatMovement = newBeat.GetComponent<BeatMovement>();
-        newBeatMovement.Initialize(spawnPoint, spawnTime, beatSpawnOffsetTime);
+        newBeatMovement.Initialize(spawnPoint, spawnTime + spawnDelay, beatSpawnOffsetTime - spawnDelay);
         beats.Enqueue(newBeat);
     }
 
     private void Awake() {
+        // Pre-calculate beatSpawnOffsetTime using the beatSpeed to avoid calculating for each beat
         float dist = spawnPoint.position.y - beatTarget.position.y;
         beatSpawnOffsetTime = dist / beatSpeed;
     }
