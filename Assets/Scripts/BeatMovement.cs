@@ -5,7 +5,6 @@ using UnityEngine;
 public class BeatMovement : MonoBehaviour {
 
     public float beatDist;
-    public float speed;
     public float spawnY;
     public float targetY;
     public float destroyY;
@@ -31,11 +30,6 @@ public class BeatMovement : MonoBehaviour {
         beatRigidBody = GetComponent<Rigidbody2D>();
         beatDist = spawnY - targetY;
     }
-
-    // Use this for initialization
-    void Start() {
-
-	}
 
 	// Update is called once per frame
 	void FixedUpdate() {
